@@ -1,9 +1,14 @@
 import { Router } from 'express'
+import mongoose from 'mongoose'
+import model from '../model/index.js'
 
 const router = Router()
+const Blog = mongoose.model('Blog', model);
 
 router.get('/', (req, res) => {
-  res.json('todo list')
+  mongoose.model('Blog').find((err, result) => {
+    res.send(result)
+  });
 })
 
 router.get('/:id', (req, res) => {
@@ -11,6 +16,9 @@ router.get('/:id', (req, res) => {
 })
 
 router.post('/', (req, res) => {
+  Blog.create(req.body, function (err) {
+    if (err) return handleError(err);
+  });  
   res.json('create todo list')
 })
 
