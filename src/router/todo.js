@@ -1,24 +1,24 @@
 import { Router } from 'express'
-import mongoose from 'mongoose'
 import model from '../model/index.js'
 
 const router = Router()
-const Blog = mongoose.model('Blog', model);
 
 router.get('/', (req, res) => {
-  mongoose.model('Blog').find((err, result) => {
+  model.find((err, result) => {
     res.send(result)
-  });
+  })
 })
 
 router.get('/:id', (req, res) => {
-  res.json(`show ${req.params.id}`)
+  model.findOne({_id: req.params.id},(err, result) => {
+    res.send(result)
+  })
 })
 
 router.post('/', (req, res) => {
-  Blog.create(req.body, function (err) {
+  model.create(req.body, function (err) {
     if (err) return handleError(err);
-  });  
+  })
   res.json('create todo list')
 })
 
@@ -29,4 +29,5 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
   res.json(`delete ${req.params.id}`)
 })
+
 export default router

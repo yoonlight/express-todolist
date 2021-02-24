@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import todo from './todo.js'
+export { todo }
 const { Schema } = mongoose;
 
 const blogSchema = new Schema({
@@ -14,4 +16,6 @@ const blogSchema = new Schema({
   }
 });
 
-export default blogSchema
+const blog = mongoose.model('Blog', blogSchema);
+
+export default blog

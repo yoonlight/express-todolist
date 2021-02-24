@@ -8,7 +8,9 @@ import mongoose from 'mongoose'
 
 dotenv.config()
 const options = { useNewUrlParser: true, useUnifiedTopology: true }
-mongoose.connect(process.env.MONGODB_URL, options).catch(error => handleError(error));
+mongoose.connect(process.env.MONGODB_URL, options)
+.then(()=>console.log('MongoDB connect success!'))
+.catch(error => handleError(error));
 
 const app = express()
 
@@ -19,7 +21,7 @@ app.use(morgan('dev'))
 app.use('/api', router)
 
 app.get('/', (req, res) => {
-  res.json('welcome to Todo List server')
+  res.json('Welcome to Todo List server')
 })
 
 app.listen(process.env.Port, () => {
