@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { todo } from '../model/index.js'
+import schedule from 'node-schedule'
 
 const router = Router()
 
@@ -10,6 +11,9 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:id', async (req, res) => {
+  if (req.query) return schedule.scheduleJob("* * * * * 30",() => {
+    console.log('hello world!')
+  })
   await todo.findOne({ _id: req.params.id }, (err, result) => {
     if (err) return res.status(404).send(err)
     res.send(result)
