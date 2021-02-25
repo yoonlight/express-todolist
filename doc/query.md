@@ -10,3 +10,11 @@ localhost:3000/api/todo
     "hidden": false
 }
 ```
+
+``` json
+{
+    "title": "Hello",
+    "author": "hello2",
+    "body": "hello"
+}
+```

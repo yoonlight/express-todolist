@@ -6,11 +6,12 @@ const router = Router()
 router.get('/', async (req, res) => {
   await todo.find((err, result) => {
     res.send(result)
-  })
+  }).skip((parseInt(req.query.offset)-1)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
 })
 
 router.get('/:id', async (req, res) => {
   await todo.findOne({ _id: req.params.id }, (err, result) => {
+    if (err) return res.status(404).send(err)
     res.send(result)
   })
 })
