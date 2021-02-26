@@ -1,3 +1,4 @@
 import todo from './todo.js'
 import blog from './blog.js'
-export { todo, blog }
+import user from './user.js'
+export { todo, blog, user }
