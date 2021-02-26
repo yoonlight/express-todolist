@@ -12,8 +12,8 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import { user } from './model/index.js';
 
-dotenv.config()
-const options = { useNewUrlParser: true, useUnifiedTopology: true }
+dotenv.config();
+const options = { useNewUrlParser: true, useUnifiedTopology: true };
 
 mongoose.connect(process.env.MONGODB_URL, options)
   .then(() => console.log('MongoDB connect success!'))
@@ -25,24 +25,25 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
+app.use(cookieParser());
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: false
 }));
-app.use('/api', router);
-app.use(passport.initialize());
-app.use(flash())
-app.use(passport.session());
-app.use(cookieParser());
-app.get('/', (req, res) => {
-  res.json('Welcome to Todo List server')
-})
-
-app.listen(process.env.Port, () => {
-  console.log('Server listening', process.env.Port)
-})
+app.use(flash());
 
 passport.use(user.createStrategy());
 passport.serializeUser(user.serializeUser());
 passport.deserializeUser(user.deserializeUser());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use('/api', router);
+
+app.get('/', (req, res) => {
+  res.json('Welcome to Todo List server')
+});
+
+app.listen(process.env.Port, () => {
+  console.log('Server listening', process.env.Port)
+});

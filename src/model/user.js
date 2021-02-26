@@ -3,10 +3,10 @@ import passportLocalMongoose from 'passport-local-mongoose';
 
 const userSchema = new mongoose.Schema({
   username:  String,
-  // password: String,
+  password: String,
 });
 
-userSchema.plugin(passportLocalMongoose,{usernameField: 'username'});
+userSchema.plugin(passportLocalMongoose);
 
 const user = mongoose.model('User', userSchema);
 
