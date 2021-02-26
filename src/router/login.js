@@ -33,11 +33,11 @@ router.post('/', async(req, res) => {
 });
 
 router.get('/login', (req, res) => {
-  res.render('login', { user: req.user, message: req.flash('error') });
+  res.json({ user: req.user, message: req.flash('error') });
 });
 
 router.post('/login',
-  passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
+  passport.authenticate('local', { failureRedirect: 'login', failureFlash: true }),
   (req, res) => {
     res.redirect('/');
   }
