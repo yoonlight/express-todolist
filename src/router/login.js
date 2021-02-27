@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import passport from 'passport'
 import { user } from '../model/index.js'
-
+import { transporter } from '../service/mailService.js'
 const router = Router()
 
 router.get('/', async (req, res) => {
@@ -10,6 +10,26 @@ router.get('/', async (req, res) => {
     console.log(req.user)
   }).skip((parseInt(req.query.offset)-1)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
 })
+
+router.post('/email', async (req, res, next) => {
+  const email = req.body.email
+  const mailOptions = {
+    from: process.env.EMAIL_ADDR,
+    to: email,
+    subject: 'Sending Email using Node.js',
+    text: 'That was easy!'
+  };
+  const mail = transporter()
+  await mail.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.json(error)
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.json({ message:'sucess' })
+    }
+  });
+});
 
 router.post('/register', (req, res, next) => {
   console.log('registering user');

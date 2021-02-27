@@ -6,7 +6,8 @@ const todoSchema = new Schema({
   author: String,
   body:   String,
   date: { type: Date, default: Date.now },
-  complete: { type: Boolean, default: false }
+  complete: { type: Boolean, default: false },
+  rate: Number
 })
 
 const todo = mongoose.model('Todo', todoSchema);
