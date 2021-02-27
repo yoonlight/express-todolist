@@ -6,7 +6,6 @@ import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import mongoose from 'mongoose';
 import passport from 'passport';
-import LocalStrategy from 'passport-local';
 import flash from 'connect-flash';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
@@ -25,9 +24,9 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
-app.use(cookieParser());
+app.use(cookieParser(process.env.SERVER_SECRET_KEY));
 app.use(session({
-  secret: 'keyboard cat',
+  secret: process.env.SERVER_SECRET_KEY,
   resave: false,
   saveUninitialized: false
 }));

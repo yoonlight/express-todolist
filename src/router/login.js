@@ -7,7 +7,6 @@ const router = Router()
 router.get('/', async (req, res) => {
   await user.find((err, result) => {
     res.send(result)
-    console.log(req.user)
   }).skip((parseInt(req.query.offset)-1)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
 })
 
@@ -66,5 +65,5 @@ router.post('/login',
 router.get('/logout', (req, res) => {
   req.logout();
   res.redirect('/');
-  });
+});
 export default router
