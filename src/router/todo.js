@@ -5,14 +5,24 @@ import schedule from 'node-schedule'
 const router = Router()
 
 router.get('/', async (req, res) => {
-  const { offset, limit } = req.query;
-  const count = await todo.countDocuments();
-  const page = Math.ceil(count/(parseInt(limit)));
-  await todo.find((err, result) => {
-    if (err) res.status(400).send(err) ;
-    if (result == []) res.status(404) ;
-    res.json({pagination: {count, page}, query : result})
-  }).skip((parseInt(offset)-1)*parseInt(limit)).limit(parseInt(limit))
+  const { offset, limit, complete } = req.query;
+  if (complete == undefined) {
+    const count = await todo.countDocuments();
+    const page = Math.ceil(count/(parseInt(limit)));
+    await todo.find((err, result) => {
+      if (err) res.status(400).send(err) ;
+      if (result == []) res.status(404) ;
+      res.json({pagination: {count, page}, query : result})
+    }).skip((parseInt(offset)-1)*parseInt(limit)).limit(parseInt(limit))
+  } else {
+    const count = await todo.countDocuments().where('complete').equals(complete);
+    const page = Math.ceil(count/(parseInt(limit)));
+    await todo.find((err, result) => {
+      if (err) res.status(400).send(err) ;
+      if (result == []) res.status(404) ;
+      res.json({pagination: {count, page}, query : result})
+    }).skip((parseInt(offset)-1)*parseInt(limit)).limit(parseInt(limit)).where('complete').equals(complete);
+  }
 })
 
 router.get('/:id', async (req, res) => {
