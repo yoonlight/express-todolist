@@ -22,7 +22,7 @@ router.post('/email', async (req, res, next) => {
   await mail.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log(error);
-      res.json(error)
+      res.status(400).json(error)
     } else {
       console.log('Email sent: ' + info.response);
       res.json({ message:'sucess' })
@@ -44,20 +44,13 @@ router.post('/register', (req, res, next) => {
   });
 });
 
-router.post('/', async(req, res) => {
-  await user.create(req.body, (err) => {
-    if (err) return handleError(err)
-  })
-  res.status(201).json('Create user!')
-});
-
 router.get('/login', (req, res) => {
-  res.json({ user: req.user, message: req.flash('error')[0] });
+  res.status(401).json({ user: req.user, message: req.flash('error')[0] });
 });
 
 router.post('/login',
   passport.authenticate('local', { failureRedirect: 'login', failureFlash: true }),
-  (req, res) => {
+  async (req, res) => {
     res.json({ message: 'success' });
   }
 );
