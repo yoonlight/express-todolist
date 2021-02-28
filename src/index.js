@@ -32,9 +32,6 @@ app.use(session({
 }));
 app.use(flash());
 
-passport.use(user.createStrategy());
-passport.serializeUser(user.serializeUser());
-passport.deserializeUser(user.deserializeUser());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/api', router);
@@ -46,3 +43,7 @@ app.get('/', (req, res) => {
 app.listen(process.env.Port, () => {
   console.log('Server listening', process.env.Port)
 });
+
+passport.use(user.createStrategy());
+passport.serializeUser(user.serializeUser());
+passport.deserializeUser(user.deserializeUser());
