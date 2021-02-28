@@ -4,26 +4,31 @@ import schedule from 'node-schedule'
 
 const router = Router()
 
-router.get('/', async (req, res) => {
-  const { offset, limit, complete } = req.query;
-  if (complete == undefined) {
-    const count = await todo.countDocuments();
-    const page = Math.ceil(count/(parseInt(limit)));
-    await todo.find().sort({date: -1}).skip((parseInt(offset)-1)*parseInt(limit)).limit(parseInt(limit)).exec((err, result) => {
-      if (err) res.status(400).send(err) ;
-      if (result == []) res.status(404) ;
-      res.json({pagination: {count, page}, query : result})
-    })
-  } else {
-    const count = await todo.countDocuments().where('complete').equals(complete);
-    const page = Math.ceil(count/(parseInt(limit)));
-    await todo.find().sort({date: -1}).skip((parseInt(offset)-1)*parseInt(limit)).limit(parseInt(limit)).where('complete').equals(complete).exec((err, result) => {
+const list = async (req, res) => {
+  const { offset, limit, complete, search } = req.query;
+  let result = todo.find().sort({date: -1}).skip((parseInt(offset)-1)*parseInt(limit)).limit(parseInt(limit))
+  let count = await todo.countDocuments();
+  if (complete != undefined) {
+    count = await todo.countDocuments().where('complete').equals(complete);
+    result.where('complete').equals(complete);
+  }
+  if (search != undefined) {
+    count = await todo.countDocuments().where('complete').equals(complete);
+    console.log('asdasd')
+  }
+  const page = Math.ceil(count/(parseInt(limit)));
+  try {
+    await result.exec((err, result) => {
       if (err) res.status(400).send(err);
       if (result == []) res.status(404);
-      res.json({pagination: {count, page}, query : result})
-    });
+      res.json({pagination: {count, page}, query : result});
+    })     
+  } catch (error) {
+    res.json(error);
   }
-})
+}
+
+router.get('/', list)
 
 router.get('/:id', async (req, res) => {
   // if (req.query) return schedule.scheduleJob("* * * * * 30",() => {
