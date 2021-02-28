@@ -46,8 +46,7 @@ router.get('/:id', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  await todo.create(req.body)
-    .exec((err) => {
+  await todo.create(req.body, (err) => {
       if (err) return handleError(err)
     })
   res.status(201).json('create todo list')
