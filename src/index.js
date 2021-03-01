@@ -6,7 +6,6 @@ import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import mongoose from 'mongoose';
 import passport from 'passport';
-import flash from 'connect-flash';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import { user } from './model/index.js';
@@ -28,9 +27,9 @@ app.use(cookieParser(process.env.SERVER_SECRET_KEY));
 app.use(session({
   secret: process.env.SERVER_SECRET_KEY,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie:{maxAge:(3.6e+6)*24}
 }));
-app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());

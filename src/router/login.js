@@ -5,9 +5,16 @@ import { transporter } from '../service/mailService.js'
 const router = Router()
 
 router.get('/', async (req, res) => {
-  await user.find((err, result) => {
-    res.send(result)
-  }).skip((parseInt(req.query.offset)-1)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
+  // await user.find().skip((parseInt(req.query.offset)-1)*parseInt(req.query.limit)).limit(parseInt(req.query.limit)).exec(
+  //   (err, result) => {
+  //     res.send(result)
+  //   }
+  // )
+  if(req.isAuthenticated()){
+    res.json('success')
+  } else {
+    res.status(404).json('failure')
+  }
 })
 
 router.post('/email', async (req, res, next) => {
@@ -57,6 +64,6 @@ router.post('/login',
 
 router.get('/logout', (req, res) => {
   req.logout();
-  res.redirect('/');
+  res.json({ message: 'logout' });
 });
 export default router
