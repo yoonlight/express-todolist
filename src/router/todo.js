@@ -55,14 +55,14 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   await todo.findOneAndUpdate({ _id: req.params.id }, req.body)
     .exec((err, result) => {
-      res.send(result)
+      res.status(200).json({message:'success to update data'})
     })
 })
 
 router.delete('/:id', async (req, res) => {
   await todo.findOneAndRemove({ _id: req.params.id })
     .exec((err, result) => {
-    res.send(result)
+      res.status(200).json({message:'success to delete data'})
   })
 })
 
