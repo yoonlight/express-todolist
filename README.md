@@ -8,6 +8,8 @@
 
 1. DB: mongoDB(mongoose)
 
+1. Auth: passport.js
+
 mongoose has error so use version 5.11.13
 
 ## function
