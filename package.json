@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "nodemon src"
+    "start": "nodemon --experimental-specifier-resolution=node src"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
