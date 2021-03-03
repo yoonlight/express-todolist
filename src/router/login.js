@@ -2,14 +2,18 @@ import { Router } from 'express'
 import passport from 'passport'
 import { user } from '../model/index.js'
 import { transporter } from '../service/mailService.js'
+import jwt from 'jsonwebtoken'
+
 const router = Router()
 
+router.get('/user', async (req, res) => {
+  const perPage = parseInt(req.query.limit)
+  const pageNum = (parseInt(req.query.offset) - 1) * perPage
+  const result = await user.find().skip(pageNum).limit(perPage)
+  res.send(result)
+})
+
 router.get('/', async (req, res) => {
-  // await user.find().skip((parseInt(req.query.offset)-1)*parseInt(req.query.limit)).limit(parseInt(req.query.limit)).exec(
-  //   (err, result) => {
-  //     res.send(result)
-  //   }
-  // )
   if (req.isAuthenticated()) {
     res.json('success')
   } else {
@@ -19,12 +23,9 @@ router.get('/', async (req, res) => {
 
 router.post('/email', async (req, res) => {
   const email = req.body.email
-  const mailOptions = {
-    from: process.env.EMAIL_ADDR,
-    to: email,
-    subject: 'Sending Email using Node.js',
-    text: 'That was easy!',
-  }
+  const mailOptions = { from: process.env.EMAIL_ADDR, to: email }
+  mailOptions.subject = 'Sending Email using Node.js'
+  mailOptions.text = 'That was easy!'
   const mail = transporter()
   await mail.sendMail(mailOptions, (error, info) => {
     if (error) {
@@ -38,19 +39,12 @@ router.post('/email', async (req, res) => {
 })
 
 router.post('/register', (req, res, next) => {
-  console.log('registering user')
   user.register(
     new user({ username: req.body.username }),
     req.body.password,
-    function (err) {
-      if (err) {
-        console.log('error while user register!', err)
-        return next(err)
-      }
-
-      console.log('user registered!')
-
-      res.status(200)
+    (err) => {
+      if (err) return next(err)
+      res.status(200).json({ message: 'register user' })
     }
   )
 })
@@ -65,8 +59,35 @@ router.post(
     failureRedirect: 'login',
     failureFlash: true,
   }),
-  async (req, res) => {
-    res.json({ message: 'success' })
+  async (req, res, next) => {
+    // if (err || !user) return res.status(400).end();
+    req.login(user, { session: false }, (error) => {
+      if (error) next(error)
+      const token = jwt.sign(
+        {
+          uid: user._id,
+        },
+        process.env.SERVER_SECRET_KEY,
+        { expiresIn: '5m' }
+      )
+      console.log(user._id)
+
+      return res.json({ message: 'success', token })
+    })
+  }
+)
+router.get(
+  '/a',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    res.send()
+  }
+)
+router.post(
+  '/profile',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    res.send(req.user.profile)
   }
 )
 
@@ -74,4 +95,5 @@ router.get('/logout', (req, res) => {
   req.logout()
   res.json({ message: 'logout' })
 })
+
 export default router

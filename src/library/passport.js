@@ -1,5 +1,5 @@
 import passportJWT from 'passport-jwt'
-import { user } from '../model/index.js'
+import { user } from '../model'
 
 export default (passport) => {
   const JwtStrategy = passportJWT.Strategy
@@ -7,8 +7,8 @@ export default (passport) => {
   let opts = {}
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken()
   opts.secretOrKey = process.env.SERVER_SECRET_KEY
-  opts.issuer = 'accounts.examplesoft.com'
-  opts.audience = 'yoursite.net'
+  // opts.issuer = 'accounts.examplesoft.com'
+  // opts.audience = 'yoursite.net'
   passport.use(
     new JwtStrategy(opts, (jwt_payload, done) => {
       user.findOne({ id: jwt_payload.sub }, (err, user) => {

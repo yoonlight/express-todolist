@@ -5,35 +5,32 @@ const router = Router()
 
 const list = async (req, res) => {
   const { offset, limit, complete, search, field } = req.query
-  let result = todo
-    .find()
-    .sort({ date: -1 })
-    .skip((parseInt(offset) - 1) * parseInt(limit))
-    .limit(parseInt(limit))
-  let count = await todo.countDocuments()
+  const perPage = parseInt(limit)
+  const pageNum = (parseInt(offset) - 1) * perPage
+  let result = todo.find().sort({ date: -1 }).skip(pageNum).limit(perPage)
+  let count = todo.countDocuments()
+
   if (complete != undefined) {
-    count = await todo.countDocuments().where('complete').equals(complete)
+    count.where('complete').equals(complete)
     result.where('complete').equals(complete)
     if (search != undefined && field != undefined) {
-      count = await todo
-        .countDocuments()
-        .where('complete')
-        .equals(complete)
-        .where(field)
-        .regex(search)
+      count.where(field).regex(search)
       result.where(field).regex(search)
     }
   }
+
   if (search != undefined && complete == undefined && field != undefined) {
-    count = await todo.countDocuments().where(field).regex(search)
+    count.where(field).regex(search)
     result.where(field).regex(search)
   }
+
   try {
-    const page = Math.ceil(count / parseInt(limit))
+    const pageCount = await count.exec()
+    const page = Math.ceil(pageCount / perPage)
     await result.exec((err, result) => {
       if (err) res.status(400).send(err)
       if (result == []) res.status(404)
-      res.json({ pagination: { count, page }, query: result })
+      res.json({ pagination: { pageCount, page }, query: result })
     })
   } catch (error) {
     res.json(error)
@@ -43,9 +40,6 @@ const list = async (req, res) => {
 router.get('/', list)
 
 router.get('/:id', async (req, res) => {
-  // if (req.query) return schedule.scheduleJob("* * * * * 30",() => {
-  //   console.log('hello world!')
-  // })
   await todo.findOne({ _id: req.params.id }).exec((err, result) => {
     if (err) return res.status(404).send(err)
     res.send(result)

@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import todo from './todo.js'
-import auth from './login.js'
+import todo from './todo'
+import auth from './login'
 const router = Router()
 
 router.get('/', (req, res) => {

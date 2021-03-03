@@ -1,4 +1,4 @@
-import todo from './todo.js'
-import blog from './blog.js'
-import user from './user.js'
+import todo from './todo'
+import blog from './blog'
+import user from './user'
 export { todo, blog, user }
