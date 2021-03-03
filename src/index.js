@@ -8,7 +8,7 @@ import mongoose from 'mongoose';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
-import { user } from './model/index.js';
+import passportConfig from './library/passport.js';
 
 dotenv.config();
 const options = { useNewUrlParser: true, useUnifiedTopology: true };
@@ -43,6 +43,4 @@ app.listen(process.env.Port, () => {
   console.log('Server listening', process.env.Port)
 });
 
-passport.use(user.createStrategy());
-passport.serializeUser(user.serializeUser());
-passport.deserializeUser(user.deserializeUser());
+passportConfig();
