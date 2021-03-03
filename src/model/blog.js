@@ -1,18 +1,18 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 const blogSchema = new mongoose.Schema({
-  title:  String,
+  title: String,
   author: String,
-  body:   String,
+  body: String,
   comments: [{ body: String, date: Date }],
   date: { type: Date, default: Date.now },
   hidden: Boolean,
   meta: {
     votes: Number,
-    favs:  Number
-  }
-});
+    favs: Number,
+  },
+})
 
-const blog = mongoose.model('Blog', blogSchema);
+const blog = mongoose.model('Blog', blogSchema)
 
 export default blog

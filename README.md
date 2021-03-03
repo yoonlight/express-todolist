@@ -25,3 +25,17 @@ mongoose has error so use version 5.11.13
 1. Session
 
 1. Sort
+
+### pacakge
+
+초기 세팅
+
+```shell
+yarn init
+yarn add express morgan express-session cookie-parser body-parser
+yarn add dotenv
+yarn add mongoose
+yarn add passport passport-jwt bcryptjs jsonwebtoken
+yarn add -D eslint eslint-config-prettier eslint-plugin-prettier prettier
+node_modules/.bin/eslint --init
+```

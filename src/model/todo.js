@@ -2,14 +2,14 @@ import mongoose from 'mongoose'
 const { Schema } = mongoose
 
 const todoSchema = new Schema({
-  title:  String,
+  title: String,
   author: String,
-  body:   String,
+  body: String,
   date: { type: Date, default: Date.now },
   complete: { type: Boolean, default: false },
-  rate: Number
+  rate: Number,
 })
 
-const todo = mongoose.model('Todo', todoSchema);
+const todo = mongoose.model('Todo', todoSchema)
 
 export default todo
