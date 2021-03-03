@@ -19,6 +19,7 @@ expressConfig(app)
 
 app.use(passport.initialize())
 app.use(passport.session())
+
 app.use('/api', router)
 
 app.get('/', (req, res) => {
@@ -29,4 +30,4 @@ app.listen(process.env.Port, () => {
   console.log('Server listening', process.env.Port)
 })
 
-passportConfig()
+passportConfig(passport)

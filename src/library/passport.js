@@ -1,8 +1,7 @@
-import passport from 'passport'
 import passportJWT from 'passport-jwt'
 import { user } from '../model/index.js'
 
-export default () => {
+export default (passport) => {
   const JwtStrategy = passportJWT.Strategy
   const ExtractJwt = passportJWT.ExtractJwt
   let opts = {}
