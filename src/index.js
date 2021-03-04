@@ -6,7 +6,7 @@ import { expressCfg, mongooseCfg, passportCfg } from './library'
 
 dotenv.config()
 
-const port = process.env.Port
+const port = process.env.PORT
 const app = express()
 
 mongooseCfg()
