@@ -5,9 +5,14 @@ import { pagination, search } from '../library/query'
 const router = Router()
 
 const list = async (req, res) => {
+  const theme = req.query.theme
   const { perPage, pageNum } = pagination(req.query)
   let result = todo.find().sort({ date: -1 }).skip(pageNum).limit(perPage)
   let count = todo.countDocuments()
+  if (theme) {
+    result.where('title').equals(theme)
+    count.where('title').equals(theme)
+  }
   const searchQuery = search(req.query, result, count)
 
   try {
@@ -22,9 +27,22 @@ const list = async (req, res) => {
     res.json(error)
   }
 }
+const theme = async (req, res) => {
+  let result = todo.find().sort({ date: -1 }).distinct('title')
+
+  try {
+    await result.exec((err, result) => {
+      if (err) res.status(400).send(err)
+      if (result == []) res.status(404)
+      res.json(result)
+    })
+  } catch (error) {
+    res.json(error)
+  }
+}
 
 router.get('/', list)
-
+router.get('/theme', theme)
 router.get('/:id', async (req, res) => {
   await todo.findOne({ _id: req.params.id }).exec((err, result) => {
     if (err) return res.status(404).send(err)

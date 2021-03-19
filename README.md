@@ -52,3 +52,5 @@ how to use es moduel
   }
 }
 ```
+
+[distinct query](https://stackoverflow.com/questions/6043847/how-do-i-query-for-distinct-values-in-mongoose)
