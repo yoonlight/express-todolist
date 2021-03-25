@@ -1,9 +1,10 @@
 import { Router } from 'express'
 import passport from 'passport'
 import { user } from '../model/index.js'
-import { transporter } from '../service/mailService.js'
+// import { transporter } from '../service/mailService.js'
 import jwt from 'jsonwebtoken'
 import { pagination } from '../library/query'
+import { eventEmitter } from '../service/event'
 
 const router = Router()
 
@@ -18,16 +19,18 @@ router.post('/email', async (req, res) => {
   const mailOptions = { from: process.env.EMAIL_ADDR, to: email }
   mailOptions.subject = 'Sending Email using Node.js'
   mailOptions.text = 'That was easy!'
-  const mail = transporter()
-  await mail.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error)
-      res.status(400).json(error)
-    } else {
-      console.log('Email sent: ' + info.response)
-      res.json({ message: 'sucess' })
-    }
-  })
+  eventEmitter.emit('sendTodo', mailOptions)
+  res.json({ message: 'sucess' })
+  // const mail = transporter()
+  // await mail.sendMail(mailOptions, (error, info) => {
+  //   if (error) {
+  //     console.log(error)
+  //     res.status(400).json(error)
+  //   } else {
+  //     console.log('Email sent: ' + info.response)
+  //     res.json({ message: 'sucess' })
+  //   }
+  // })
 })
 
 router.post('/register', (req, res, next) => {

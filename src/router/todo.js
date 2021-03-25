@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { todo } from '../model/index.js'
 import { pagination, search } from '../library/query'
 import passport from 'passport'
+import { eventEmitter } from '../service/event'
 
 const router = Router()
 
@@ -25,6 +26,7 @@ const list = async (req, res) => {
       if (err) res.status(400).send(err)
       if (result == []) res.status(404)
       res.json({ pagination: { pageCount, page }, query: result })
+      eventEmitter.emit('sendTodo', result)
     })
   } catch (error) {
     res.json(error)
