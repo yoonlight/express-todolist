@@ -1,12 +1,11 @@
 import { Router } from 'express'
 import { todo } from '../model/index.js'
 import { pagination, search } from '../library/query'
-import passport from 'passport'
-import { eventEmitter } from '../service/event'
+// import passport from 'passport'
 
 const router = Router()
 
-const auth = passport.authenticate('jwt', { session: false })
+// const auth = passport.authenticate('jwt', { session: false })
 
 const list = async (req, res) => {
   const theme = req.query.theme
@@ -26,7 +25,6 @@ const list = async (req, res) => {
       if (err) res.status(400).send(err)
       if (result == []) res.status(404)
       res.json({ pagination: { pageCount, page }, query: result })
-      eventEmitter.emit('sendTodo', result)
     })
   } catch (error) {
     res.json(error)
@@ -58,20 +56,20 @@ router.get('/:id', async (req, res) => {
   })
 })
 
-router.post('/', auth, async (req, res) => {
+router.post('/', async (req, res) => {
   await todo.create(req.body, (err) => {
     if (err) return console.log(err)
   })
   res.status(201).json('create todo list')
 })
 
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', async (req, res) => {
   await todo.findOneAndUpdate({ _id: req.params.id }, req.body).exec(() => {
     res.status(200).json({ message: 'success to update data' })
   })
 })
 
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   await todo.findOneAndRemove({ _id: req.params.id }).exec(() => {
     res.status(200).json({ message: 'success to delete data' })
   })

@@ -21,16 +21,6 @@ router.post('/email', async (req, res) => {
   mailOptions.text = 'That was easy!'
   eventEmitter.emit('sendTodo', mailOptions)
   res.json({ message: 'sucess' })
-  // const mail = transporter()
-  // await mail.sendMail(mailOptions, (error, info) => {
-  //   if (error) {
-  //     console.log(error)
-  //     res.status(400).json(error)
-  //   } else {
-  //     console.log('Email sent: ' + info.response)
-  //     res.json({ message: 'sucess' })
-  //   }
-  // })
 })
 
 router.post('/register', (req, res, next) => {

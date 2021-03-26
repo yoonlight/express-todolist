@@ -11,8 +11,8 @@ const send = function () {
       if (error1) {
         throw error1
       }
-      var queue = 'hello'
-      var msg = 'Hello world'
+      let queue = 'hello'
+      let msg = 'Hello world'
 
       channel.assertQueue(queue, {
         durable: false,
@@ -33,8 +33,8 @@ const sendTodo = function (body) {
       if (error1) {
         throw error1
       }
-      var queue = 'todo'
-      var msg = body
+      let queue = 'mail'
+      let msg = body
 
       channel.assertQueue(queue, {
         durable: false,
