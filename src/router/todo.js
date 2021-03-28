@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { todo } from '../model/index.js'
 import { pagination, search } from '../library/query'
 // import passport from 'passport'
+import { eventEmitter } from '../service/event'
 
 const router = Router()
 
@@ -59,19 +60,25 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   await todo.create(req.body, (err) => {
     if (err) return console.log(err)
+    const msg = 'create todo list'
+    eventEmitter.emit('updateTodo', msg)
+    res.status(201).json(msg)
   })
-  res.status(201).json('create todo list')
 })
 
 router.put('/:id', async (req, res) => {
   await todo.findOneAndUpdate({ _id: req.params.id }, req.body).exec(() => {
-    res.status(200).json({ message: 'success to update data' })
+    const msg = { message: 'success to update data' }
+    eventEmitter.emit('updateTodo', msg)
+    res.status(200).json(msg)
   })
 })
 
 router.delete('/:id', async (req, res) => {
   await todo.findOneAndRemove({ _id: req.params.id }).exec(() => {
-    res.status(200).json({ message: 'success to delete data' })
+    const msg = { message: 'success to delete data' }
+    eventEmitter.emit('updateTodo', msg)
+    res.status(200).json(msg)
   })
 })
 
