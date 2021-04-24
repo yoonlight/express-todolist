@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "nodemon --experimental-specifier-resolution=node src"
+    "start": "nodemon --experimental-specifier-resolution=node -r dotenv/config src"
   },
   "dependencies": {
     "amqplib": "^0.7.1",

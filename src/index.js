@@ -1,10 +1,7 @@
 import express from 'express'
-import dotenv from 'dotenv'
 import passport from 'passport'
 import router from './router'
 import { expressCfg, mongooseCfg, passportCfg } from './library'
-
-dotenv.config()
 
 const port = process.env.PORT
 const app = express()
